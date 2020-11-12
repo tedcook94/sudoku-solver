@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class Sudoku {
   List<List<_Cell>> sudoku = [
     [
@@ -118,39 +120,41 @@ class Sudoku {
       print("Sudoku is not valid.");
   }
 
-  // Returns whether or not the sudoku is valid based on the provided numbers
+
   bool _isValid() {
-    // Track current row since any() iterates in order
-    int rowIndex = -1;
+    // Returns whether or not the sudoku is valid based on current numbers
 
-    // Return opposite of result since we're searching for matches in rows
-    // and columns, which would make the sudoku invalid
-    return !this.sudoku.any((row) {
-      rowIndex++;
+    for (var i = 0; i < this.sudoku.length; i++) {
+      List<_Cell> row = this.sudoku[i];
 
-      // Track current column
-      int columnIndex = -1;
+      for (var j = 0; j < row.length; j++) {
+        if (row[j].number == 0) continue;
 
-      return row.any((cell) {
-        columnIndex++;
-        // If cell wasn't provided, then no need to check it
-        if (!cell.provided) return false;
+        _Cell cell = row[j];
+        List<_Cell> col = this.sudoku.map((row2) => row2[j]).toList();
+        int blockSize = sqrt(this.sudoku.length).round();
 
-        // Check if any cells to the right in the same row have a matching number
-        bool rowMatchFound = -1 !=
-            row.indexWhere((cellToRight) => cellToRight.number == cell.number,
-                columnIndex + 1);
+        // See if cell in same row has same number
+        // Only have to look to the right since we're going in order
+        if (-1 != row.indexWhere((cell2) => cell.number == cell2.number, j + 1))
+          return false;
+        // See if cell in same column has same number
+        // Only have to look down since we're going in order
+        if (-1 != col.indexWhere((cell2) => cell.number == cell2.number, i + 1))
+          return false;
+        // See if cell in same block has same number
+        // Only have to look right and down since we're going in order
+        for (int x = i; (x ~/ blockSize) == (i ~/ blockSize); x++) {
+          for (int y = j; (y ~/ blockSize) == (j ~/ blockSize); y++) {
+            if ((x != i || y != j) && this.sudoku[x][y].number == cell.number)
+              return false;
+          }
+        }
+      }
+    }
 
-        // Check if any cells below in the same column have a matching number
-        bool colMatchFound = -1 !=
-            this.sudoku.indexWhere(
-                (row2) => row2[columnIndex].number == cell.number,
-                rowIndex + 1);
-
-        // Return if match found in either the row or the column
-        return rowMatchFound || colMatchFound;
-      });
-    });
+    // If we never find a match, then it must be valid
+    return true;
   }
 }
 
