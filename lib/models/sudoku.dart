@@ -104,13 +104,7 @@ class Sudoku {
   ];
 
   Sudoku() {
-    this.sudoku.forEach((row) {
-      String rowConcat = "";
-      row.forEach((cell) {
-        rowConcat += cell.number.toString() + " ";
-      });
-      print(rowConcat);
-    });
+    this._printSudoku();
   }
 
   void solve() {
@@ -120,6 +114,15 @@ class Sudoku {
       print("Sudoku is not valid.");
   }
 
+  void _printSudoku() {
+    this.sudoku.forEach((row) {
+      String rowConcat = "";
+      row.forEach((cell) {
+        rowConcat += cell.number.toString() + " ";
+      });
+      print(rowConcat);
+    });
+  }
 
   bool _isValid() {
     // Returns whether or not the sudoku is valid based on current numbers
