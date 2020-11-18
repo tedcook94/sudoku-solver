@@ -18,9 +18,12 @@ class Sudoku {
   }
 
   void solve() {
+    var start = DateTime.now();
+
     bool success = this._attemptSolution();
 
     print("Sudoku " + (success ? "has been solved!" : "could not be completed."));
+    print("Duration: " + DateTime.now().difference(start).inMilliseconds.toString() + " ms");
     print("");
     this._printSudoku();
   }
