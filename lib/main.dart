@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sudoku_solver/models/sudoku.dart';
 
 import 'package:sudoku_solver/widgets/sudoku-table.dart';
+import 'package:sudoku_solver/widgets/key-table.dart';
 
 void main() {
   runApp(MyApp());
@@ -48,11 +49,23 @@ class HomePage extends StatelessWidget {
                   tableSize: 9,
                 )),
           ),
-          Padding(
-            padding: EdgeInsets.all(20.0),
-            child: RaisedButton(
-              onPressed: sudoku.solve,
-              child: Text('Solve Sudoku'),
+          Expanded(
+            flex: 3,
+            child:Center( 
+              child:Padding(
+                padding: EdgeInsets.all(10.0),
+                child: KeyTable(rows: 2, cols: 5)
+              ),
+            )
+          ),
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: RaisedButton(
+                onPressed: sudoku.solve,
+                child: Text('Solve Sudoku'),
+              ),
             ),
           ),
         ]),
